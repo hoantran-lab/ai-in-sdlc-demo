@@ -1,0 +1,85 @@
+// ============================================================
+// Prisma Schema - Family Expense Management App
+// Version: 1.0
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// TABLE: app_sessions
+// Session management cho đăng nhập PIN
+// ============================================================
+model app_sessions {
+  id        String   @id @default(uuid())
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("app_sessions")
+}
+
+// ============================================================
+// TABLE: login_attempts
+// Tracking failed login attempts for lockout
+// ============================================================
+model login_attempts {
+  id          Int      @id @default(autoincrement())
+  attemptTime DateTime @default(now()) @map("attempt_time")
+  isSuccess   Boolean  @default(false) @map("is_success")
+  ipAddress   String?  @map("ip_address")
+
+  @@index([attemptTime])
+  @@map("login_attempts")
+}
+
+// ============================================================
+// TABLE: mst_categories
+// Master data - Danh mục chi tiêu
+// ============================================================
+model mst_categories {
+  code      String   @id
+  name      String
+  icon      String
+  color     String
+  sortOrder Int      @default(0) @map("sort_order")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  expenses trn_expenses[]
+
+  @@index([isActive])
+  @@index([sortOrder])
+  @@map("mst_categories")
+}
+
+// ============================================================
+// TABLE: trn_expenses
+// Transaction - Chi tiêu
+// ============================================================
+model trn_expenses {
+  id           String   @id @default(uuid())
+  amount       Int // VND, no decimals
+  categoryCode String   @map("category_code")
+  expenseDate  DateTime @map("expense_date")
+  note         String? // Optional note
+  isDeleted    Boolean  @default(false) @map("is_deleted")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  category mst_categories @relation(fields: [categoryCode], references: [code])
+
+  @@index([expenseDate])
+  @@index([categoryCode])
+  @@index([isDeleted])
+  @@index([expenseDate, isDeleted])
+  @@map("trn_expenses")
+}
