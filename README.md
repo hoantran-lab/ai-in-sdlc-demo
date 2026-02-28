@@ -1,12 +1,13 @@
 # 🏠 Quản lý Chi tiêu Gia đình — AI-in-SDLC Demo
 
-> **Demo thực tế** việc sử dụng AI (GitHub Copilot + Custom Instructions, Skills, Agents) xuyên suốt vòng đời phát triển phần mềm — từ phân tích yêu cầu, thiết kế, đến lập trình.
+> **Demo thực tế** việc sử dụng AI (GitHub Copilot + Custom Instructions, Skills, Agents) xuyên suốt vòng đời phát triển phần mềm — từ phân tích yêu cầu, thiết kế, lập trình, đến kiểm thử.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-06B6D4?logo=tailwindcss)
 ![Prisma](https://img.shields.io/badge/Prisma-5-2D3748?logo=prisma)
 ![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite)
+![Vitest](https://img.shields.io/badge/Vitest-4-6E9F18?logo=vitest)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ---
@@ -21,6 +22,7 @@
 - [Tìm hiểu Skills & Agents](#-tìm-hiểu-skills--agents)
 - [Tài liệu dự án](#-tài-liệu-dự-án)
 - [Tech Stack](#-tech-stack)
+- [Kiểm thử (Testing)](#-kiểm-thử-testing)
 - [Database Schema](#-database-schema)
 
 ---
@@ -32,7 +34,13 @@
 - Đăng nhập bằng mã PIN 4 số cho tiện
 - Cuối tháng xem biểu đồ để biết tiêu bao nhiêu
 
-**Điểm đặc biệt:** Toàn bộ quy trình từ phân tích → thiết kế → code đều do **AI (GitHub Copilot)** thực hiện, được điều khiển bởi hệ thống **Custom Instructions**, **Skills** và **Agents** tự định nghĩa.
+**Điểm đặc biệt:** Toàn bộ quy trình từ phân tích → thiết kế → code → kiểm thử đều do **AI (GitHub Copilot)** thực hiện, được điều khiển bởi hệ thống **Custom Instructions**, **Skills** và **Agents** tự định nghĩa.
+
+### 🚦 Trạng thái dự án
+
+```
+✅ Phân tích yêu cầu ──▶ ✅ Thiết kế cơ bản ──▶ ✅ Thiết kế chi tiết ──▶ ✅ Lập trình ──▶ ✅ Unit Test ──▶ 🔄 Integration Test
+```
 
 ### Chức năng
 
@@ -82,9 +90,18 @@ Dự án này demo cách tổ chức Copilot để AI tham gia vào **toàn bộ
 │  │   │Agent       │ │ Agent  │ │          │        │   │
 │  │   └────────────┘ └────────┘ └──────────┘        │   │
 │  └──────────────────────────────────────────────────┘   │
+│         │                                               │
+│         ▼                                               │
+│  ┌──────────────────────────────────────────────────┐   │
+│  │         Testing Skills                           │   │
+│  │  ┌────────────────┐  ┌─────────────────────────┐ │   │
+│  │  │ unit-testing    │  │ integration-test-       │ │   │
+│  │  │ (UT cho từng UC)│  │ generator (IT xuyên UC) │ │   │
+│  │  └────────────────┘  └─────────────────────────┘ │   │
+│  └──────────────────────────────────────────────────┘   │
 │                                                         │
 │  docs/01-requirements/  → docs/02-external-design/      │
-│  → docs/03-internal-design/  → src/ (Source code)       │
+│  → docs/03-internal-design/  → src/ → testing/          │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -95,6 +112,8 @@ Dự án này demo cách tổ chức Copilot để AI tham gia vào **toàn bộ
 3. **Skill `external-design-generator`:** Đọc SRS → sinh thiết kế kiến trúc, màn hình, DB logic, API (OpenAPI YAML)
 4. **Skill `internal-design-generator`:** Đọc external design → sinh pseudocode, class diagram, Prisma schema + tự kiểm tra tính khả thi (Feasibility Check)
 5. **Skill `multi-agent-coder`:** Đọc internal design → điều phối Scaffolding → Coder → QA agents để sinh code
+6. **Skill `unit-testing`:** Đọc internal design + source code → sinh test cases + test scripts (Vitest) cho từng UC
+7. **Skill `integration-test-generator`:** Đọc requirements + external design → sinh kịch bản kiểm thử tích hợp xuyên suốt các UC (chuẩn IPA)
 
 ---
 
@@ -210,6 +229,11 @@ ai-in-sdlc-demo/
     │   ├── 01-requirements/             #    SRS: Business, Functional, Non-functional
     │   ├── 02-external-design/          #    Thiết kế cơ bản (UC-01~03)
     │   └── 03-internal-design/          #    Thiết kế chi tiết + Feasibility Check
+    ├── testing/                         # 🧪 Kiểm thử (AI sinh ra)
+    │   ├── integration/                 #    IT: Kịch bản kiểm thử tích hợp
+    │   │   └── IT_Test_Cases.md         #    8 kịch bản, 18 test cases
+    │   └── unittesting/                 #    UT: Unit test cho từng UC
+    │       └── UC-02/                   #    Test scripts + data + evidence
     ├── prisma/
     │   ├── schema.prisma                #    Database schema
     │   ├── seed.ts                      #    Seed 4 danh mục
@@ -255,16 +279,17 @@ File `.github/copilot-instructions.md` định nghĩa các **quy tắc bất di 
 
 Mỗi skill nằm trong `.github/skills/<tên>/SKILL.md` và có thể kèm `references/` (templates, examples).
 
-| # | Skill | Từ khóa kích hoạt | Mô tả |
-|---|-------|-------------------|-------|
-| 1 | **req-analyzer** | "phân tích yêu cầu", "use case", "user story" | Chuyên gia BA — biến meeting notes thành tài liệu SRS có cấu trúc |
-| 2 | **external-design-generator** | "thiết kế cơ bản", "external design", "基本設計" | Sinh 4 tài liệu: Kiến trúc, Màn hình, DB Logic, API (chuẩn IPA Nhật Bản) |
-| 3 | **internal-design-generator** | "thiết kế chi tiết", "internal design", "詳細設計" | Sinh pseudocode, Prisma schema, class design + Feasibility Check đa vai |
-| 4 | **multi-agent-coder** | "bắt đầu code", "lập trình multi-agent" | Orchestrator điều phối 3 sub-agents: Scaffolding → Coder → QA |
-| 5 | unit-testing | *(placeholder)* | Sinh unit test |
-| 6 | legacy-refactor | *(placeholder)* | Refactor code legacy |
-| 7 | log-rca-analyzer | *(placeholder)* | Phân tích log, tìm root cause |
-| 8 | mock-data-factory | *(placeholder)* | Sinh mock data cho testing |
+| # | Skill | Từ khóa kích hoạt | Mô tả | Trạng thái |
+|---|-------|-------------------|-------|:---:|
+| 1 | **req-analyzer** | "phân tích yêu cầu", "use case", "user story" | Chuyên gia BA — biến meeting notes thành tài liệu SRS có cấu trúc | ✅ Đã dùng |
+| 2 | **external-design-generator** | "thiết kế cơ bản", "external design", "基本設計" | Sinh 4 tài liệu: Kiến trúc, Màn hình, DB Logic, API (chuẩn IPA Nhật Bản) | ✅ Đã dùng |
+| 3 | **internal-design-generator** | "thiết kế chi tiết", "internal design", "詳細設計" | Sinh pseudocode, Prisma schema, class design + Feasibility Check đa vai | ✅ Đã dùng |
+| 4 | **multi-agent-coder** | "bắt đầu code", "lập trình multi-agent" | Orchestrator điều phối 3 sub-agents: Scaffolding → Coder → QA | ✅ Đã dùng |
+| 5 | **unit-testing** | "unit test", "kiểm thử đơn vị" | Sinh test cases + test scripts (Vitest) cho từng UC | ✅ Đã dùng |
+| 6 | **integration-test-generator** | "integration test", "kiểm thử tích hợp" | Sinh kịch bản IT xuyên suốt các UC (chuẩn IPA) | ✅ Đã dùng |
+| 7 | legacy-refactor | *(placeholder)* | Refactor code legacy | ⬜ |
+| 8 | log-rca-analyzer | *(placeholder)* | Phân tích log, tìm root cause | ⬜ |
+| 9 | mock-data-factory | *(placeholder)* | Sinh mock data cho testing | ⬜ |
 
 ### Cách chạy thử Skills
 
@@ -284,6 +309,12 @@ Mỗi skill nằm trong `.github/skills/<tên>/SKILL.md` và có thể kèm `ref
 
 # Skill 4: Bắt đầu code
 > Bắt đầu code chức năng UC-01
+
+# Skill 5: Unit test
+> Tạo unit test cho UC-02
+
+# Skill 6: Integration test
+> Tạo integration test cho toàn bộ hệ thống
 ```
 
 ### Multi-Agent Coder — Chi tiết
@@ -318,6 +349,8 @@ Toàn bộ tài liệu được AI sinh ra từ meeting notes, lưu trong `docs/
 | Thiết kế chi tiết | `docs/03-internal-design/UC-0x/` | Program Design, Processing Logic |
 | DB vật lý | `docs/03-internal-design/00_Butsuri_DB_Sekkei.md` | Prisma Schema thiết kế |
 | Kiểm tra khả thi | `docs/03-internal-design/99_Feasibility_Check_Report.md` | Review đa vai (Dev + Tester) |
+| Unit Test | `testing/unittesting/UC-02/` | Test cases, scripts (Vitest), data, evidence |
+| Integration Test | `testing/integration/IT_Test_Cases.md` | 8 kịch bản tích hợp, 18 test cases (chuẩn IPA) |
 
 ---
 
@@ -334,6 +367,7 @@ Toàn bộ tài liệu được AI sinh ra từ meeting notes, lưu trong `docs/
 | Date/Time | date-fns | 4.1.0 |
 | Charts | Recharts | 3.7.0 |
 | Auth | bcrypt | 6.0.0 |
+| Testing | Vitest | 4.0.18 |
 | Language | TypeScript | 5 |
 
 ---
