@@ -1,0 +1,82 @@
+============================================================
+ EVIDENCE: UC-02 Unit Test Execution Log
+ Ngày chạy: 2026-02-26 22:15
+ Vitest v4.0.18
+ Kết quả: 68 PASSED / 0 FAILED
+============================================================
+
+ RUN  v4.0.18 /Users/tranvanhoan/Documents/Projects/Learning/family-expense-app/app-project/testing/unittesting/UC-02
+
+ ✓ scripts/currency-utils.test.ts > formatCurrency (LIB-012) > UT-CUR-001: formatCurrency(1500000) → "1.500.000 đ" 10ms
+ ✓ scripts/currency-utils.test.ts > formatCurrency (LIB-012) > UT-CUR-002: formatCurrency(50000) → "50.000 đ" 0ms
+ ✓ scripts/currency-utils.test.ts > formatCurrency (LIB-012) > UT-CUR-003: formatCurrency(0) → "0 đ" 0ms
+ ✓ scripts/currency-utils.test.ts > formatCurrency (LIB-012) > UT-CUR-004: formatCurrency(1) → "1 đ" 0ms
+ ✓ scripts/currency-utils.test.ts > formatCurrency (LIB-012) > UT-CUR-005: formatCurrency(999999999) → "999.999.999 đ" 0ms
+ ✓ scripts/currency-utils.test.ts > formatCurrency (LIB-012) > UT-CUR-006: formatCurrency(-100000) → "-100.000 đ" 0ms
+ ✓ scripts/currency-utils.test.ts > parseCurrency (LIB-012) > UT-CUR-007: parseCurrency("1.500.000") → 1500000 0ms
+ ✓ scripts/currency-utils.test.ts > parseCurrency (LIB-012) > UT-CUR-008: parseCurrency("50000") → 50000 0ms
+ ✓ scripts/currency-utils.test.ts > parseCurrency (LIB-012) > UT-CUR-009: parseCurrency("") → 0 0ms
+ ✓ scripts/currency-utils.test.ts > parseCurrency (LIB-012) > UT-CUR-010: parseCurrency("abcxyz") → 0 0ms
+ ✓ scripts/currency-utils.test.ts > parseCurrency (LIB-012) > UT-CUR-011: parseCurrency("1.500.000 đ") → 1500000 0ms
+ ✓ scripts/expense-validation.test.ts > CreateExpenseSchema (LIB-011) > UT-ZOD-001: Happy path đầy đủ → success, dữ liệu đúng 1ms
+ ✓ scripts/expense-validation.test.ts > CreateExpenseSchema (LIB-011) > UT-ZOD-002: Không có note → success, note = undefined 0ms
+ ✓ scripts/expense-validation.test.ts > CreateExpenseSchema (LIB-011) > UT-ZOD-003: Note có khoảng trắng → trim 0ms
+ ✓ scripts/expense-validation.test.ts > CreateExpenseSchema (LIB-011) > UT-ZOD-004: Note toàn khoảng trắng → trim → rỗng → undefined 0ms
+ ✓ scripts/expense-validation.test.ts > CreateExpenseSchema (LIB-011) > UT-ZOD-005: Sai kiểu amount → error "Vui lòng nhập số tiền" 0ms
+ ✓ scripts/expense-validation.test.ts > CreateExpenseSchema (LIB-011) > UT-ZOD-007: Sai format ngày (DD/MM/YYYY) → error "Ngày không hợp lệ" 0ms
+ ✓ scripts/expense-validation.test.ts > CreateExpenseSchema (LIB-011) > UT-ZOD-008: Tháng 13 không tồn tại → error "Ngày không hợp lệ" 0ms
+ ✓ scripts/expense-validation.test.ts > CreateExpenseSchema (LIB-011) > UT-ZOD-006: Tất cả 4 category codes hợp lệ 0ms
+ ✓ scripts/expense-validation.test.ts > CreateExpenseSchema (LIB-011) > UT-ZOD-009: Ngày cuối tháng 2 (28/02/2026, 2026 không nhuận) → hợp lệ 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 1: Kiểm tra Session (Authentication) > UT-EXP-001: Không có header X-Session-Id → 401 3ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 1: Kiểm tra Session (Authentication) > UT-EXP-002: X-Session-Id chuỗi rỗng → 401 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 1: Kiểm tra Session (Authentication) > UT-EXP-003: Session không tồn tại trong DB → 401 1ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 1: Kiểm tra Session (Authentication) > UT-EXP-004: Session đã hết hạn → 401 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 2: Parse Request Body > UT-EXP-005: Body không phải JSON hợp lệ → 400 1ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 2: Parse Request Body > UT-EXP-006: Không gửi body → 400 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-007: Object rỗng → 400 1ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-008: Sai kiểu dữ liệu tất cả field → 400 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-009: amount = 0 → 400 "Số tiền phải lớn hơn 0" 1ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-010: amount âm → 400 "Số tiền phải lớn hơn 0" 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-011: amount = MIN_AMOUNT (1) → 201 1ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-012: amount = MAX_AMOUNT (999,999,999) → 201 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-013: amount > MAX_AMOUNT → 400 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-014: categoryCode không nằm trong danh sách → 400 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-015: categoryCode chuỗi rỗng → 400 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-016: expenseDate không hợp lệ → 400 "Ngày không hợp lệ" 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-017: Ngày tương lai xa → 400 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-018: expenseDate chuỗi rỗng → 400 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-019: note = 200 ký tự (MAX_NOTE_LENGTH) → 201 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 3: Zod Validation > UT-EXP-020: note = 201 ký tự → 400 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 4: Business Validation bổ sung > UT-EXP-021: Category bị isActive=false → 400 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 4: Business Validation bổ sung > UT-EXP-022: Ngày mai → 400 "Ngày chi tiêu không được trong tương lai" 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 4: Business Validation bổ sung > UT-EXP-023: Ngày hôm nay → 201 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 4: Business Validation bổ sung > UT-EXP-024: Ngày hôm qua → 201 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 5+6: Tạo chi tiêu & Response thành công > UT-EXP-025: Happy path đầy đủ → 201 với dữ liệu đúng 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 5+6: Tạo chi tiêu & Response thành công > UT-EXP-026: Không có note → 201 với note: null 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 5+6: Tạo chi tiêu & Response thành công > UT-EXP-027: Note chuỗi rỗng → 201 với note: null (Zod transform) 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 5+6: Tạo chi tiêu & Response thành công > UT-EXP-028: Note có khoảng trắng → 201 với note đã trim 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > BƯỚC 7: Xử lý lỗi hệ thống > UT-EXP-029: Prisma create ném Error → 500 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > Dữ liệu không hợp lệ / Tấn công (不正データ) > UT-EXP-030: XSS trong note → 201, note lưu nguyên dạng text 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > Dữ liệu không hợp lệ / Tấn công (不正データ) > UT-EXP-031: SQL Injection trong categoryCode → 400 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > Dữ liệu không hợp lệ / Tấn công (不正データ) > UT-EXP-032: SQL Injection trong note → 201, note lưu nguyên 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > Dữ liệu không hợp lệ / Tấn công (不正データ) > UT-EXP-033: Tất cả field = null → 400 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > Dữ liệu không hợp lệ / Tấn công (不正データ) > UT-EXP-034: Tất cả field = undefined → 400 (JSON.stringify loại bỏ → {}) 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > Dữ liệu không hợp lệ / Tấn công (不正データ) > UT-EXP-035: amount = Infinity → 400 (JSON serialize thành null) 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > Dữ liệu không hợp lệ / Tấn công (不正データ) > UT-EXP-036: amount = NaN → 400 (JSON serialize thành null) 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > Dữ liệu không hợp lệ / Tấn công (不正データ) > UT-EXP-037: amount = 1.5 (số thập phân) → 201 (Zod chấp nhận number) 0ms
+ ✓ scripts/api-expenses-route.test.ts > POST /api/expenses (LGC-015) > Dữ liệu không hợp lệ / Tấn công (不正データ) > UT-EXP-038: Extra fields → 201, Zod loại bỏ field thừa 0ms
+ ✓ scripts/date-utils.test.ts > formatDate (LIB-013) > UT-DAT-001: formatDate → "25/02/2026" 1ms
+ ✓ scripts/date-utils.test.ts > formatDate (LIB-013) > UT-DAT-002: formatDate → "01/01/2026" 0ms
+ ✓ scripts/date-utils.test.ts > formatDate (LIB-013) > UT-DAT-003: formatDate → "31/12/2026" 0ms
+ ✓ scripts/date-utils.test.ts > toISODateString (LIB-013) > UT-DAT-004: toISODateString → "2026-02-25" 0ms
+ ✓ scripts/date-utils.test.ts > toISODateString (LIB-013) > UT-DAT-005: toISODateString → "2026-01-01" 0ms
+ ✓ scripts/date-utils.test.ts > isFutureDate (LIB-013) > UT-DAT-006: Hôm nay → false (không phải tương lai) 0ms
+ ✓ scripts/date-utils.test.ts > isFutureDate (LIB-013) > UT-DAT-007: Hôm qua → false 0ms
+ ✓ scripts/date-utils.test.ts > isFutureDate (LIB-013) > UT-DAT-008: Ngày mai → true 0ms
+ ✓ scripts/date-utils.test.ts > isFutureDate (LIB-013) > UT-DAT-009: Tương lai xa (2099-12-31) → true 0ms
+ ✓ scripts/date-utils.test.ts > getYesterday (LIB-013) > UT-DAT-010: Hôm nay 2026-02-26 → trả về 2026-02-25 0ms
+
+ Test Files  4 passed (4)
+      Tests  68 passed (68)
+   Start at  22:15:25
+   Duration  999ms (transform 187ms, setup 0ms, import 2.03s, tests 35ms, environment 0ms)
